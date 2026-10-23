@@ -1,9 +1,9 @@
-# Homebrew tap for heyListen
+# nikolaia's Homebrew tap
 
 [heyListen](https://github.com/nikolaia/heylisten): local-only meeting transcription and summaries for Norwegian meetings, on Apple Silicon Macs.
 
 ```bash
-brew install --cask nikolaia/heylisten/heylisten
+brew install --cask nikolaia/tap/heylisten
 brew upgrade --cask heylisten        # later updates
 ```
 
