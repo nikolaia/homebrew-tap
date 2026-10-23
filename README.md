@@ -1,0 +1,16 @@
+# Homebrew tap for heyListen
+
+[heyListen](https://github.com/nikolaia/heylisten): local-only meeting transcription and summaries for Norwegian meetings, on Apple Silicon Macs.
+
+```bash
+brew install --cask nikolaia/heylisten/heylisten
+brew upgrade --cask heylisten        # later updates
+```
+
+This installs `heyListen.app` in Applications and the `heylisten` command. heyListen isn't notarized by Apple yet, so after installing or upgrading, open it once and click *Open Anyway* under System Settings → Privacy & Security.
+
+The cask follows heyListen's releases on its own: [a workflow](.github/workflows/update.yml) checks every hour and only moves to a release whose zip matches its published checksum and was built by heyListen's own release workflow (verified with `gh attestation verify`).
+
+`brew uninstall --zap heylisten` also removes heyListen's models, meeting transcripts, kept audio and settings. Your notes are never touched.
+
+Bug reports and ideas go to [the heyListen repo](https://github.com/nikolaia/heylisten/issues).

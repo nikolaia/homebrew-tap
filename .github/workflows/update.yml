@@ -1,0 +1,44 @@
+# Points the cask at the newest heyListen release. Runs every hour, or by hand.
+#
+# It only moves to a release whose zip matches the release's SHA256SUMS and carries a build
+# attestation from heyListen's own workflow, so the tap can't point at a zip built anywhere else.
+# No credentials from the heyListen repo are needed: this repo updates itself.
+#
+# Every action is pinned to a full commit SHA, so a moved tag can't change what runs here.
+name: Update cask
+
+on:
+  schedule:
+    - cron: "23 * * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - name: Update to the newest heyListen release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          tag=$(gh release view --repo nikolaia/heylisten --json tagName -q .tagName)
+          version=${tag#v}
+          current=$(sed -n 's/^  version "\(.*\)"/\1/p' Casks/heylisten.rb)
+          if [ "$version" = "$current" ]; then
+            echo "Up to date: $version"
+            exit 0
+          fi
+          gh release download "$tag" --repo nikolaia/heylisten --pattern heyListen-macos-arm64.zip --pattern SHA256SUMS
+          sha256sum --check SHA256SUMS
+          gh attestation verify heyListen-macos-arm64.zip --repo nikolaia/heylisten
+          sha=$(cut -d' ' -f1 SHA256SUMS)
+          sed -i "s/^  version \".*\"/  version \"$version\"/; s/^  sha256 \".*\"/  sha256 \"$sha\"/" Casks/heylisten.rb
+          rm heyListen-macos-arm64.zip SHA256SUMS
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git commit -am "heylisten $version"
+          git push
