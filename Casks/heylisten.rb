@@ -8,7 +8,7 @@ cask "heylisten" do
   homepage "https://github.com/nikolaia/heylisten"
 
   depends_on arch: :arm64
-  depends_on macos: ">= :sonoma"
+  depends_on macos: :sonoma
 
   app "heyListen.app"
   binary "#{appdir}/heyListen.app/Contents/MacOS/heylisten"
