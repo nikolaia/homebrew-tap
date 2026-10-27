@@ -1,6 +1,6 @@
 cask "heylisten" do
-  version "0.1.2"
-  sha256 "b0581835e57e1a7165f1ac1e1dccfb1085101d5d96561e0a6f9b6fdb8901e905"
+  version "0.1.3"
+  sha256 "929ffccf73476d5ac116b0a0b73af10717b69da1d44536bb69c9b59916bd7656"
 
   url "https://github.com/nikolaia/heylisten/releases/download/v#{version}/heyListen-macos-arm64.zip"
   name "heyListen"
